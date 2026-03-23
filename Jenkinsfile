@@ -2,6 +2,7 @@ pipeline {
   agent any
 
   stages {
+
     stage('Install') {
       steps {
         sh """
@@ -28,7 +29,7 @@ pipeline {
       }
     }
 
-    stage('Run') {
+    stage('Run app.py') {
       steps {
         sh """
           . venv/bin/activate
@@ -36,5 +37,15 @@ pipeline {
         """
       }
     }
-  }
-}
+
+    stage('Run pythonfile.py') {
+      steps {
+        sh """
+          . venv/bin/activate
+          python pythonfile.py
+        """
+      }
+    }
+
+  } // end stages
+} // end pipeline
