@@ -46,6 +46,15 @@ pipeline {
         """
       }
     }
+    stage('Run python123.py') {
+      steps {
+        sh """
+          . venv/bin/activate
+          python python123.py
+        """
+      }
+    }
+    
 
   } // end stages
 } // end pipeline
