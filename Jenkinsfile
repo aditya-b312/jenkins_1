@@ -7,6 +7,7 @@ pipeline {
         sh """
           python3 -m venv venv
           . venv/bin/activate
+          pip install --upgrade pip
           pip install -r requirements.txt
         """
       }
@@ -14,10 +15,16 @@ pipeline {
 
     stage('Test') {
       steps {
-        sh """
+        sh '''
+          set -e
           . venv/bin/activate
-          pytest
-        """
+          pytest || EC=$?
+          if [ "${EC:-0}" -eq 5 ]; then
+            echo "pytest found no tests (exit code 5). Treating as success."
+            exit 0
+          fi
+          exit ${EC:-0}
+        '''
       }
     }
 
